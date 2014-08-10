@@ -1,0 +1,50 @@
+#!/bin/sh /etc/rc.common
+START=50
+
+run_njit()
+{
+	local enable
+	# 获取变量值
+	# config_get_bool 变量名 Section名 Section参数名
+	config_get_bool enable $1 enable
+	
+	if [ $enable ]; then
+		local username
+		local password
+		local domain
+		local ifname
+		
+		# 获取变量值
+		# config_get 变量名 Section名 Section参数名
+		config_get username $1 username
+		config_get password $1 password
+		config_get domain $1 domain
+		config_get ifname $1 ifname
+		
+		if [ "$domain" != "" ]; then
+			njit-client $username@$domain $password $ifname &
+		else
+			njit-client $username $password $ifname &
+		fi
+		
+		echo "NJIT Client has started."
+	fi
+}
+
+start()
+{
+	# 读取配置文件
+	config_load njitclient
+	
+	# 遍历配置文件中的Section
+	# config_foreach 遍历函数名 Section类型
+	config_foreach run_njit login
+}
+
+stop()
+{
+	killall njit-client
+	killall udhcpc
+	
+	echo "NJIT Client has stoped."
+}
