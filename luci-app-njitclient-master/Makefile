@@ -1,5 +1,8 @@
 include $(TOPDIR)/rules.mk
 
+## 变量
+# $(BUILD_DIR) => /build_dir/target-mips_xxx
+
 ## 软件包名称，将在menuconfig和ipkg可以看到
 PKG_NAME:=luci-app-njitclient
 ## 软件版本号
@@ -9,9 +12,9 @@ PKG_RELEASE:=1
 ## 软件维护者
 PKG_MAINTAINER:=JPH <jphome98@163.com>
 ## 源代码的文件名
-# PKG_SOURCE
+# PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 ## 源代码的下载网站位置
-# PKG_SOURCE_URL
+# PKG_SOURCE_URL:=https://raw.githubusercontent.com/jphome/luci-xxx/master/
 # 获取代码方式可以为git、svn、cvs、hg、bzr等
 # 下载方法参考$(INCLUDE_DIR)/download.mk 和 $(SCRIPT_DIR)/download.pl
 #	@SF		sourceforge网站
@@ -20,10 +23,10 @@ PKG_MAINTAINER:=JPH <jphome98@163.com>
 #	@KERNEL
 ## 源代码文件的效验码
 # PKG_MD5SUM
-## 源代码文件的解压方法
-# PKG_CAT
+## 解压软件包的方法(zcat, bzcat, unzip)
+# PKG_CAT:=zcat
 
-## 软件包编译目录 [默认为$(BUILD_DIR)/$( PKG_NAME)$( PKG_VERSION)]
+## 软件包编译目录 [默认为$(BUILD_DIR)/$(PKG_NAME)$(PKG_VERSION)]
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 
 include $(INCLUDE_DIR)/package.mk
@@ -52,6 +55,9 @@ endef
 
 ## 编译准备 创建文件夹、拷贝源文件
 define Build/Prepare
+## 下载的源码压缩包位于/dl
+# tar -zxvf $(TOPDIR)/dl/$(PKG_NAME)-$(PKG_VERSION).tar.gz  -C $(BUILD_DIR)
+# $(CP) $(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)/src/* $(PKG_BUILD_DIR)/
 endef
 
 ## 针对需要配置的软件包 Automake中./configure
@@ -71,6 +77,7 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/model/cbi
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/controller
 	
+	# $(CP) $(PKG_BUILD_DIR)/files/xxx $(1)/xxx
 	$(INSTALL_CONF) ./files/root/etc/config/njitclient $(1)/etc/config/njitclient
 	$(INSTALL_BIN) ./files/root/etc/init.d/njitclient $(1)/etc/init.d/njitclient
 	$(INSTALL_DATA) ./files/root/usr/lib/lua/luci/model/cbi/njitclient.lua $(1)/usr/lib/lua/luci/model/cbi/njitclient.lua
@@ -102,4 +109,5 @@ define Package/$(PKG_NAME)/postrm
 endef
 
 ## 使用eval函数实现各种定义
+# BuildPackage 与 $(PKG_NAME)之间不能留空格
 $(eval $(call BuildPackage,$(PKG_NAME)))

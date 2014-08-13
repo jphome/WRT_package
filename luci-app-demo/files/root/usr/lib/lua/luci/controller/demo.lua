@@ -12,8 +12,9 @@ function index()
 		-- 访问指定页面（Views）：template("myapp/mymodule")	访问/usr/lib/lua/luci/view/myapp/mymodule.htm
 		-- 调用CBI(Configuration Binding Interface) Module：cbi("myapp/mymodule")	调用/usr/lib/lua/luci/model/cbi/myapp/mymodule.lua
 		-- 重定向：alias("admin", "status", "overview")
-	entry({"admin", "status", "demo"}, call("func_demo"), _("LuCI Demo"), 100)
-	end
+	-- entry({"admin", "status", "demo"}, call("func_demo"), _("LuCI Demo"), 100)
+	entry({"admin", "status", "demo"}, cbi("demo"), _("LuCI Demo"), 100)
+end
 
 function func_demo()
 	local syslog = luci.sys.syslog()

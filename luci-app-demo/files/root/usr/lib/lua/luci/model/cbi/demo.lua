@@ -17,36 +17,54 @@ require("luci.sys")
 -- 映射与存储文件的关系
 -- m = Map("配置文件文件名", "配置页面标题", "配置页面说明")
 	-- 配置文件文件名：配置文件存储的文件名，不包含路径 /etc/config/xxx
-m = Map("njitclient", translate("NJIT Client"), translate("Configure NJIT 802.11x client."))
+m = Map("demo", translate("Demo Client"), translate("Configure demo client."))
+
+-- 对应/etc/config/demo
+-- config login
+-- 	option username ''
+-- 	option password ''
+-- 	option ifname 'eth0'
+-- 	option domain ''
 
 -- 配置文件中对应的section
-s = m:section(TypedSection, "login", "")
+sec_1 = m:section(TypedSection, "login", "")
 -- 不允许增加或删除
-s.addremove = false
+sec_1.addremove = false
 -- 不显示Section的名称
-s.anonymous = true
+sec_1.anonymous = true
 
 -- 配置文件中section的交互(创建Option)
 	-- Value（文本框）
 	-- ListValue（下拉框）
 	-- Flag（选择框）
-enable = s:option(Flag, "enable", translate("Enable"))
-name = s:option(Value, "username", translate("Username"))
-pass = s:option(Value, "password", translate("Password"))
+enable = sec_1:option(Flag, "enable", translate("Enable"))
+name = sec_1:option(Value, "username", translate("Username"))
+name.default = "xxx"
+pass = sec_1:option(Value, "password", translate("Password"))
 pass.password = true
-domain = s:option(Value, "domain", translate("Domain"))
+pass.default = "xxx"
+domainname = sec_1:option(Value, "domainname", translate("Domainname"))
+domainname.default = "jphome.github.com"
 
-ifname = s:option(ListValue, "ifname", translate("Interfaces"))
+ifname = sec_1:option(ListValue, "ifname", translate("Interfaces"))
 for k, v in ipairs(luci.sys.net.devices()) do
 	if v ~= "lo" then
 		ifname:value(v)
 	end
 end
 
+sec_2 = m:section(TypedSection, "demo_list", translate("Config demo_list"), translate("The options below are all of demo's arguments."))
+sec_2.anonymous = true
+ip_list = sec_2:option(ListValue, "ip_list", translate("ip_list"), translate("default to 192.168.1.1"))
+ip_list.anonymous = true
+ip_list:value("192.168.1.0", translate("0(ip_1)"))
+ip_list:value("192.168.1.1", translate("1(ip_2)"))
+ip_list.default = "192.168.1.1"
+
 -- 判断是否点击了“应用”按钮
 local apply = luci.http.formvalue("cbi.apply")
 if apply then
-	io.popen("/etc/init.d/njitclient restart")
+	-- io.popen("/etc/init.d/njitclient restart")
 end
 
 return m

@@ -1,3 +1,5 @@
+PO = demo_language
+
 include $(TOPDIR)/rules.mk
 
 ## 软件包名称，将在menuconfig和ipkg可以看到
@@ -66,13 +68,13 @@ endef
 
 ## 软件包的安装方法		$(1) -> 嵌入系统的镜像目录 /
 define Package/$(PKG_NAME)/install
-	# $(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_DIR) $(1)/etc/config
 	# $(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/model/cbi
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/controller
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/view
 	
-	# $(INSTALL_CONF) ./files/root/etc/config/njitclient $(1)/etc/config/njitclient
+	$(INSTALL_CONF) ./files/root/etc/config/demo $(1)/etc/config/demo
 	# $(INSTALL_BIN) ./files/root/etc/init.d/njitclient $(1)/etc/init.d/njitclient
 	$(INSTALL_DATA) ./files/root/usr/lib/lua/luci/model/cbi/demo.lua $(1)/usr/lib/lua/luci/model/cbi/demo.lua
 	$(INSTALL_DATA) ./files/root/usr/lib/lua/luci/controller/demo.lua $(1)/usr/lib/lua/luci/controller/demo.lua
