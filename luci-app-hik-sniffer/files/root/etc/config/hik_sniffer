@@ -1,0 +1,7 @@
+config ipc
+	option ipaddr 192.168.2.4
+
+config hikvision ipc_list
+	list ipaddr 192.168.2.4
+	list ipaddr 192.168.2.5
+	list ipaddr 192.168.2.6

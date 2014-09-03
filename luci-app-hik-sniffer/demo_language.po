@@ -1,0 +1,41 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+msgid "Configure demo client."
+msgstr "配置demo客户端"
+
+msgid "Demo Client"
+msgstr "demo客户端"
+
+msgid "Enable"
+msgstr "使能"
+
+msgid "Username"
+msgstr "用户名"
+
+msgid "Password"
+msgstr "密码"
+
+msgid "Domainname"
+msgstr "域名"
+
+msgid "Interfaces"
+msgstr "网卡"
+
+msgid "Config demo_list"
+msgstr "配置的demo_list"
+
+msgid "The options below are all of demo's arguments."
+msgstr "下面的所有选项都是demo的参数"
+
+msgid "ip_list"
+msgstr "ip列表"
+
+msgid "default to 192.168.1.1"
+msgstr "默认为192.168.1.1"
+
+msgid "0(ip_1)"
+msgstr "第一组ip"
+
+msgid "1(ip_2)"
+msgstr "第二组ip"

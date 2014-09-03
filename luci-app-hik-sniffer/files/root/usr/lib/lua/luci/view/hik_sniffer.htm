@@ -1,0 +1,50 @@
+
+<%-
+local uci = require "luci.model.uci".cursor()
+
+function dev_info(callback)
+	local pair
+	local index
+	
+	for key, val in pairs(uci:get_list("hik_sniffer", "ipc_list", "ipaddr")) do
+		local x = {
+			["index"] = key,
+			["IP address"] = val
+		}
+
+		callback(x)
+	end
+end
+-%>
+
+<%+header%>
+
+<h2><a id="content" name="content">海康设备</a></h2>
+
+<div class="cbi-map-descr">搜索海康设备信息</div>
+
+<fieldset class="cbi-section" id="cbi-table-table">
+	<legend>
+		设备列表
+		<input type="button" onclick="location.href='?update=1'" href="#" class="cbi-button cbi-button-apply" style="margin-left:3em" value="<%:Update lists%>" />
+	</legend>
+	<div class="cbi-section-node">
+		<table class="cbi-section-table">
+			<tr class="cbi-section-table-titles">
+				<th class="cbi-section-table-cell">序号</th>
+				<th class="cbi-section-table-cell"><%_<abbr title="Internet Protocol Version 4">IPv4</abbr>-Address%></th>
+				<th class="cbi-section-table-cell"><%_<abbr title="Media Access Control">MAC</abbr>-Address%></th>
+			</tr>
+
+			<% dev_info(function(e) %>
+			<tr class="cbi-section-table-row cbi-rowstyle-<%=(style and 1 or 2)%>">
+				<td class="cbi-value-field"><%=e["index"]%></td>
+				<td class="cbi-value-field"><%=e["IP address"]%></td>
+				<td class="cbi-value-field">xxx</td>
+			</tr>
+			<% style = not style; end) %>
+		</table>
+	</div>
+</fieldset>
+
+<%+footer%>
